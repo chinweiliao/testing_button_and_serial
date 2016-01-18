@@ -23,6 +23,9 @@ color currentColor;
 boolean rectOver = false;
 boolean circleOver = false;
 
+int linefeed = 10; 
+
+
 void setup() {
   size(640, 360);
   rectColor = color(0);
@@ -43,7 +46,7 @@ void setup() {
   
   String portName = Serial.list()[2];
   myPort = new Serial(this, portName, 9600);
-  
+  myPort.bufferUntil(linefeed);
 }
 
 void draw() {
@@ -79,7 +82,34 @@ void update(int x, int y) {
   }
 }
 
+void serialEvent(Serial myPort) {
 
+  // read the serial buffer:
+  String myString = myPort.readStringUntil(linefeed);
+
+  // if you got any bytes other than the linefeed:
+  if (myString != null) {
+    /*
+    myString = trim(myString);
+
+    // split the string at the commas
+    // and convert the sections into integers:
+
+    //pSensors = sensors;
+    sensors = int(split(myString, ','));
+
+    // print out the values you got:
+    
+    for (int sensorNum = 0; sensorNum < sensors.length; sensorNum++) {
+      print("Sensor " + sensorNum + ": " + sensors[sensorNum] + " ");
+    }
+    */
+    print(myString);
+    // add a linefeed after all the sensor values are printed:
+    println();
+
+  }
+}
 
 
 
